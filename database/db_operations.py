@@ -12,15 +12,15 @@ def mysql_connect():
     )
     return db_con
 
-def insert_team(team):
+def insert_skill(skill):
     """
-	Method to insert a team into the database
+	Method to insert a skill into the database
 	"""
     try:
         db_con = mysql_connect()
         # Create a cursor to interact with the database
         db_session = db_con.cursor()      
-        insert_query = f"INSERT INTO hackathon.teams (team_name, member1, member2, member3) VALUES ('{team['team_name']}','{team['member1']}','{team['member2']}', '{team['member3']}');"
+        insert_query = f"INSERT INTO portfolio.skills (skill_name, stream_name) VALUES ('{skill['skill_name']}','{skill['stream_name']}');"
         res= db_session.execute(insert_query)
         db_con.commit()
         print("res", res)
@@ -30,42 +30,40 @@ def insert_team(team):
         print(str(err))
         raise
 
-def get_teams():
+def get_skills():
     db_con = mysql_connect()
     # Create a cursor to interact with the database
     db_session = db_con.cursor()
     # Execute a SELECT query
-    query = f"SELECT * FROM hackathon.teams"
+    query = f"SELECT * FROM portfolio.skills"
     db_session.execute(query)
     # Fetch all records from the result set
-    all_teams = db_session.fetchall()
-    teams = []
-    for team in all_teams:
-        team_dict = {
-            "team_name" : team[0],
-            'member1': team[1],
-            'member2': team[2],
-            'member3': team[3]        
+    all_skills = db_session.fetchall()
+    skills = []
+    for skill in all_skills:
+        skill_dict = {
+            "skill_name" : skill[0],
+            'stream_name': skill[1]      
             }
-        teams.append(team_dict)
-    print(teams)
-    return teams
+        skills.append(skill_dict)
+    print(skills)
+    return skills
 
 
-def update_team(team):
+def update_skill(skill):
     db_con = mysql_connect()
     # Create a cursor to interact with the database
     db_session = db_con.cursor()
-    update_query = f"UPDATE hackathon.teams SET member1 = '{team['member1']}' WHERE team_name = '{team['team_name']}';"
+    update_query = f"UPDATE portfolio.skills SET skill_name = '{skill['skill_name']}' WHERE stream_name = '{skill['stream_name']}';"
     print(update_query)
     db_session.execute(update_query)
     db_con.commit()
 
-def delete_team(team):
+def delete_skill(skill):
     db_con = mysql_connect()
     # Create a cursor to interact with the database
     db_session = db_con.cursor()
-    update_query = f"DELETE FROM hackathon.teams WHERE team_name = '{team['team_name']}';"
+    update_query = f"DELETE FROM portfolio.skills WHERE skill_name = '{skill['skill_name']}';"
     print(update_query)
     db_session.execute(update_query)
     db_con.commit()
